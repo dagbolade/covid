@@ -1521,6 +1521,7 @@
       <column caption='Standardized_Country' datatype='string' name='[Calculation_3815956274183344163]' role='dimension' type='nominal'>
         <calculation class='tableau' formula='CASE [Country]&#13;&#10;  WHEN &quot;United Kingdom of Great Britain and Northern Ireland&quot; THEN &quot;United Kingdom&quot;&#13;&#10;  ELSE [Country]&#13;&#10;END' />
       </column>
+      <column caption='Country (population data cleaned.csv)' datatype='string' name='[Country (population_data_cleaned.csv)]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
       <column datatype='string' name='[Country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
       <column caption='Country code' datatype='string' name='[Country_code]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
       <column aggregation='None' datatype='integer' name='[Cumulative cases (bin)]' role='dimension' type='quantitative'>
@@ -3495,11 +3496,15 @@
             <datasource caption='cleaned_covid_data (2)' name='federated.1l502fs06d8sad17191mc0d7wgtl (copy)' />
           </datasources>
           <datasource-dependencies datasource='federated.1l502fs06d8sad17191mc0d7wgtl (copy)'>
-            <column datatype='string' name='[Country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+            <column caption='Country (population data cleaned.csv)' datatype='string' name='[Country (population_data_cleaned.csv)]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
             <column caption='New cases' datatype='real' name='[New_cases]' role='measure' type='quantitative' />
-            <column-instance column='[Country]' derivation='None' name='[none:Country:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Country (population_data_cleaned.csv)]' derivation='None' name='[none:Country (population_data_cleaned.csv):nk]' pivot='key' type='nominal' />
             <column-instance column='[New_cases]' derivation='Sum' name='[sum:New_cases:qk]' pivot='key' type='quantitative' />
           </datasource-dependencies>
+          <filter class='quantitative' column='[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[sum:New_cases:qk]' included-values='non-null' />
+          <slices>
+            <column>[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[sum:New_cases:qk]</column>
+          </slices>
           <aggregation value='true' />
         </view>
         <style>
@@ -3532,7 +3537,7 @@
             </style>
           </pane>
         </panes>
-        <rows>[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[none:Country:nk]</rows>
+        <rows>[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[none:Country (population_data_cleaned.csv):nk]</rows>
         <cols>[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[sum:New_cases:qk]</cols>
       </table>
       <simple-id uuid='{51E5CD13-EA05-4563-AFB0-15D9163D0610}' />
