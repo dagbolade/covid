@@ -374,6 +374,7 @@
       <column-instance column='[Cumulative_deaths]' derivation='Sum' name='[sum:Cumulative_deaths:qk]' pivot='key' type='quantitative' />
       <column-instance column='[New_cases]' derivation='Sum' name='[sum:New_cases:qk]' pivot='key' type='quantitative' />
       <column-instance column='[New_deaths]' derivation='Sum' name='[sum:New_deaths:qk]' pivot='key' type='quantitative' />
+      <column-instance column='[Date_reported]' derivation='Day-Trunc' name='[tdy:Date_reported:ok]' pivot='key' type='ordinal' />
       <column-instance column='[Date_reported]' derivation='Year-Trunc' name='[tyr:Date_reported:ok]' pivot='key' type='ordinal' />
       <column-instance column='[New_cases]' derivation='Sum' name='[win:sum:New_cases:qk]' pivot='key' type='quantitative'>
         <table-calc aggregation='Avg' from='-2' ordering-type='Rows' to='0' type='WindowTotal' window-options='IncludeCurrent' />
@@ -387,6 +388,11 @@
         <groupfilter function='crossjoin'>
           <groupfilter function='level-members' level='[Country]' />
           <groupfilter function='level-members' level='[Date_reported]' />
+        </groupfilter>
+      </group>
+      <group caption='Action (DAY(Date reported))' hidden='true' name='[Action (DAY(Date reported))]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[tdy:Date_reported:ok]' />
         </groupfilter>
       </group>
       <group caption='Action (Date reported)' hidden='true' name='[Action (Date reported)]' name-style='unqualified' user:auto-column='sheet_link'>
@@ -1307,66 +1313,26 @@
             <column datatype='integer' name='Week' ordinal='10' />
           </columns>
         </_.fcp.ObjectModelEncapsulateLegacy.false...relation>
-        <_.fcp.ObjectModelEncapsulateLegacy.true...relation type='collection'>
-          <relation connection='textscan.1l0vw8p1hkjain194cty31cnczm1 (copy)' name='cleaned_covid_data.csv' table='[cleaned_covid_data#csv]' type='table'>
-            <columns character-set='UTF-8' header='yes' locale='en_GB' separator=','>
-              <column datatype='date' name='Date_reported' ordinal='0' />
-              <column datatype='string' name='Country_code' ordinal='1' />
-              <column datatype='string' name='Country' ordinal='2' />
-              <column datatype='string' name='WHO_region' ordinal='3' />
-              <column datatype='real' name='New_cases' ordinal='4' />
-              <column datatype='integer' name='Cumulative_cases' ordinal='5' />
-              <column datatype='real' name='New_deaths' ordinal='6' />
-              <column datatype='integer' name='Cumulative_deaths' ordinal='7' />
-              <column datatype='integer' name='Year' ordinal='8' />
-              <column datatype='string' name='Month' ordinal='9' />
-              <column datatype='integer' name='Week' ordinal='10' />
-            </columns>
-          </relation>
-          <relation connection='textscan.1l0vw8p1hkjain194cty31cnczm1 (copy)' name='population_data_cleaned.csv' table='[population_data_cleaned#csv]' type='table'>
-            <columns character-set='UTF-8' header='yes' locale='en_GB' separator=','>
-              <column datatype='string' name='Country' ordinal='0' />
-              <column datatype='real' name='Population' ordinal='1' />
-            </columns>
-          </relation>
+        <_.fcp.ObjectModelEncapsulateLegacy.true...relation connection='textscan.1l0vw8p1hkjain194cty31cnczm1 (copy)' name='cleaned_covid_data.csv' table='[cleaned_covid_data#csv]' type='table'>
+          <columns character-set='UTF-8' header='yes' locale='en_GB' separator=','>
+            <column datatype='date' name='Date_reported' ordinal='0' />
+            <column datatype='string' name='Country_code' ordinal='1' />
+            <column datatype='string' name='Country' ordinal='2' />
+            <column datatype='string' name='WHO_region' ordinal='3' />
+            <column datatype='real' name='New_cases' ordinal='4' />
+            <column datatype='integer' name='Cumulative_cases' ordinal='5' />
+            <column datatype='real' name='New_deaths' ordinal='6' />
+            <column datatype='integer' name='Cumulative_deaths' ordinal='7' />
+            <column datatype='integer' name='Year' ordinal='8' />
+            <column datatype='string' name='Month' ordinal='9' />
+            <column datatype='integer' name='Week' ordinal='10' />
+          </columns>
         </_.fcp.ObjectModelEncapsulateLegacy.true...relation>
-        <cols>
-          <map key='[Country (population_data_cleaned.csv)]' value='[population_data_cleaned.csv].[Country]' />
-          <map key='[Country]' value='[cleaned_covid_data.csv].[Country]' />
-          <map key='[Country_code]' value='[cleaned_covid_data.csv].[Country_code]' />
-          <map key='[Cumulative_cases]' value='[cleaned_covid_data.csv].[Cumulative_cases]' />
-          <map key='[Cumulative_deaths]' value='[cleaned_covid_data.csv].[Cumulative_deaths]' />
-          <map key='[Date_reported]' value='[cleaned_covid_data.csv].[Date_reported]' />
-          <map key='[Month]' value='[cleaned_covid_data.csv].[Month]' />
-          <map key='[New_cases]' value='[cleaned_covid_data.csv].[New_cases]' />
-          <map key='[New_deaths]' value='[cleaned_covid_data.csv].[New_deaths]' />
-          <map key='[Population]' value='[population_data_cleaned.csv].[Population]' />
-          <map key='[WHO_region]' value='[cleaned_covid_data.csv].[WHO_region]' />
-          <map key='[Week]' value='[cleaned_covid_data.csv].[Week]' />
-          <map key='[Year]' value='[cleaned_covid_data.csv].[Year]' />
-        </cols>
         <metadata-records>
           <metadata-record class='capability'>
             <remote-name />
             <remote-type>0</remote-type>
             <parent-name>[cleaned_covid_data.csv]</parent-name>
-            <remote-alias />
-            <aggregation>Count</aggregation>
-            <contains-null>true</contains-null>
-            <attributes>
-              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
-              <attribute datatype='string' name='collation'>&quot;en_GB&quot;</attribute>
-              <attribute datatype='string' name='currency'>&quot;£&quot;</attribute>
-              <attribute datatype='string' name='field-delimiter'>&quot;,&quot;</attribute>
-              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
-              <attribute datatype='string' name='locale'>&quot;en_GB&quot;</attribute>
-              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
-            </attributes>
-          </metadata-record>
-          <metadata-record class='capability'>
-            <remote-name />
-            <remote-type>0</remote-type>
-            <parent-name>[population_data_cleaned.csv]</parent-name>
             <remote-alias />
             <aggregation>Count</aggregation>
             <contains-null>true</contains-null>
@@ -1524,33 +1490,6 @@
             <contains-null>true</contains-null>
             <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[cleaned_covid_data.csv_EE8AB320B34E4CF8B93EF9D39B8CBA6E]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
           </metadata-record>
-          <metadata-record class='column'>
-            <remote-name>Country</remote-name>
-            <remote-type>129</remote-type>
-            <local-name>[Country (population_data_cleaned.csv)]</local-name>
-            <parent-name>[population_data_cleaned.csv]</parent-name>
-            <remote-alias>Country</remote-alias>
-            <ordinal>11</ordinal>
-            <local-type>string</local-type>
-            <aggregation>Count</aggregation>
-            <scale>1</scale>
-            <width>1073741823</width>
-            <contains-null>true</contains-null>
-            <collation flag='0' name='LEN_RGB' />
-            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[population_data_cleaned.csv_5123E67F78F0476780EDAFDEDE7A9978]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
-          </metadata-record>
-          <metadata-record class='column'>
-            <remote-name>Population</remote-name>
-            <remote-type>5</remote-type>
-            <local-name>[Population]</local-name>
-            <parent-name>[population_data_cleaned.csv]</parent-name>
-            <remote-alias>Population</remote-alias>
-            <ordinal>12</ordinal>
-            <local-type>real</local-type>
-            <aggregation>Sum</aggregation>
-            <contains-null>true</contains-null>
-            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[population_data_cleaned.csv_5123E67F78F0476780EDAFDEDE7A9978]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
-          </metadata-record>
         </metadata-records>
       </connection>
       <aliases enabled='yes' />
@@ -1568,10 +1507,10 @@
         </calculation>
       </column>
       <column caption='cases per 100k' datatype='real' name='[Calculation_3815956273447686164]' role='measure' type='quantitative'>
-        <calculation class='tableau' formula='MAX([Cumulative_cases]) / SUM([Population]) * 100000' />
+        <calculation class='tableau' formula='(MAX([Cumulative_cases]) / SUM(IF [Calculation_3815956274183344163] = [Calculation_3815956274183344163] THEN [Population] END)) * 100000' />
       </column>
       <column caption='Deaths per 100k' datatype='real' name='[Calculation_3815956273448067093]' role='measure' type='quantitative'>
-        <calculation class='tableau' formula='MAX([Cumulative_deaths]) / SUM([Population]) * 100000' />
+        <calculation class='tableau' formula='(MAX([Cumulative_deaths]) / SUM(IF [Calculation_3815956274183344163] = [Calculation_3815956274183344163] THEN [Population] END)) * 100000' />
       </column>
       <column caption='Start Date' datatype='date' name='[Calculation_3815956273647312928]' role='dimension' type='ordinal'>
         <calculation class='tableau' formula='[Parameters].[Parameter 3]' />
@@ -1579,10 +1518,12 @@
       <column caption='End Date' datatype='date' name='[Calculation_3815956273647460385]' role='dimension' type='ordinal'>
         <calculation class='tableau' formula='[Parameters].[Parameter 3]' />
       </column>
-      <column caption='Country (population data cleaned.csv)' datatype='string' name='[Country (population_data_cleaned.csv)]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+      <column caption='Standardized_Country' datatype='string' name='[Calculation_3815956274183344163]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='CASE [Country]&#13;&#10;  WHEN &quot;United Kingdom of Great Britain and Northern Ireland&quot; THEN &quot;United Kingdom&quot;&#13;&#10;  ELSE [Country]&#13;&#10;END' />
+      </column>
       <column datatype='string' name='[Country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
       <column caption='Country code' datatype='string' name='[Country_code]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
-      <column datatype='integer' name='[Cumulative cases (bin)]' role='dimension' type='quantitative'>
+      <column aggregation='None' datatype='integer' name='[Cumulative cases (bin)]' role='dimension' type='quantitative'>
         <calculation class='bin' decimals='6' formula='[Cumulative_cases]' peg='0' size='1.47059e+06' />
       </column>
       <column caption='Cumulative cases' datatype='integer' name='[Cumulative_cases]' role='measure' type='quantitative' />
@@ -1590,7 +1531,6 @@
       <column caption='Date reported' datatype='date' name='[Date_reported]' role='dimension' type='ordinal' />
       <column caption='New cases' datatype='real' name='[New_cases]' role='measure' type='quantitative' />
       <column caption='New deaths' datatype='real' name='[New_deaths]' role='measure' type='quantitative' />
-      <column datatype='real' name='[Population]' role='measure' type='quantitative' />
       <column caption='WHO region' datatype='string' name='[WHO_region]' role='dimension' type='nominal'>
         <aliases>
           <alias key='&quot;AFRO&quot;' value='AFRICA' />
@@ -1604,7 +1544,6 @@
       <column datatype='integer' name='[Week]' role='dimension' type='quantitative' />
       <column datatype='integer' name='[Year]' role='dimension' type='quantitative' />
       <_.fcp.ObjectModelTableType.true...column caption='cleaned_covid_data.csv' datatype='table' name='[__tableau_internal_object_id__].[cleaned_covid_data.csv_EE8AB320B34E4CF8B93EF9D39B8CBA6E]' role='measure' type='quantitative' />
-      <_.fcp.ObjectModelTableType.true...column caption='population_data_cleaned.csv' datatype='table' name='[__tableau_internal_object_id__].[population_data_cleaned.csv_5123E67F78F0476780EDAFDEDE7A9978]' role='measure' type='quantitative' />
       <column-instance column='[New_cases]' derivation='Avg' name='[avg:New_cases:qk]' pivot='key' type='quantitative' />
       <column-instance column='[Cumulative_cases]' derivation='Max' name='[cum:max:Cumulative_cases:qk]' pivot='key' type='quantitative'>
         <table-calc aggregation='Sum' ordering-type='Rows' type='CumTotal' />
@@ -1633,7 +1572,7 @@
       <column-instance column='[Cumulative_deaths]' derivation='Sum' name='[sum:Cumulative_deaths:qk]' pivot='key' type='quantitative' />
       <column-instance column='[New_cases]' derivation='Sum' name='[sum:New_cases:qk]' pivot='key' type='quantitative' />
       <column-instance column='[New_deaths]' derivation='Sum' name='[sum:New_deaths:qk]' pivot='key' type='quantitative' />
-      <column-instance column='[Population]' derivation='Sum' name='[sum:Population:qk]' pivot='key' type='quantitative' />
+      <column-instance column='[Date_reported]' derivation='Day-Trunc' name='[tdy:Date_reported:ok]' pivot='key' type='ordinal' />
       <column-instance column='[Date_reported]' derivation='Year-Trunc' name='[tyr:Date_reported:ok]' pivot='key' type='ordinal' />
       <column-instance column='[Calculation_3815956272906489868]' derivation='User' name='[usr:Calculation_3815956272906489868:qk]' pivot='key' type='quantitative'>
         <table-calc ordering-type='Rows' />
@@ -1655,6 +1594,11 @@
           <groupfilter function='level-members' level='[Date_reported]' />
         </groupfilter>
       </group>
+      <group caption='Action (DAY(Date reported))' hidden='true' name='[Action (DAY(Date reported))]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[tdy:Date_reported:ok]' />
+        </groupfilter>
+      </group>
       <group caption='Action (Date reported)' hidden='true' name='[Action (Date reported)]' name-style='unqualified' user:auto-column='sheet_link'>
         <groupfilter function='crossjoin'>
           <groupfilter function='level-members' level='[Date_reported]' />
@@ -1665,7 +1609,7 @@
           <groupfilter function='level-members' level='[tyr:Date_reported:ok]' />
         </groupfilter>
       </group>
-      <layout _.fcp.SchemaViewerObjectModel.false...dim-percentage='0.5' _.fcp.SchemaViewerObjectModel.false...measure-percentage='0.4' dim-ordering='alphabetic' measure-ordering='alphabetic' show-structure='true' />
+      <layout _.fcp.SchemaViewerObjectModel.false...dim-percentage='0.5' _.fcp.SchemaViewerObjectModel.false...measure-percentage='0.4' dim-ordering='alphabetic' measure-ordering='alphabetic' rowDisplayCount='1000' show-structure='true' />
       <style>
         <style-rule element='mark'>
           <encoding attr='color' field='[none:WHO_region:nk]' type='palette'>
@@ -2500,14 +2444,6 @@
               <bucket>&quot;WPRO&quot;</bucket>
             </map>
           </encoding>
-          <encoding attr='color' field='[none:Calculation_3815956272899162114:nk]' type='palette'>
-            <map to='#4e79a7'>
-              <bucket>true</bucket>
-            </map>
-            <map to='#bab0ac'>
-              <bucket>false</bucket>
-            </map>
-          </encoding>
           <encoding attr='color' field='[none:AdhocCluster:1:ok]' type='palette'>
             <map to='#4e79a7'>
               <bucket>1</bucket>
@@ -2578,27 +2514,7 @@
               </relation>
             </properties>
           </object>
-          <object caption='population_data_cleaned.csv' id='population_data_cleaned.csv_5123E67F78F0476780EDAFDEDE7A9978'>
-            <properties context=''>
-              <relation connection='textscan.1l0vw8p1hkjain194cty31cnczm1 (copy)' name='population_data_cleaned.csv' table='[population_data_cleaned#csv]' type='table'>
-                <columns character-set='UTF-8' header='yes' locale='en_GB' separator=','>
-                  <column datatype='string' name='Country' ordinal='0' />
-                  <column datatype='real' name='Population' ordinal='1' />
-                </columns>
-              </relation>
-            </properties>
-          </object>
         </objects>
-        <relationships>
-          <relationship>
-            <expression op='='>
-              <expression op='[Country]' />
-              <expression op='[Country (population_data_cleaned.csv)]' />
-            </expression>
-            <first-end-point object-id='cleaned_covid_data.csv_EE8AB320B34E4CF8B93EF9D39B8CBA6E' />
-            <second-end-point object-id='population_data_cleaned.csv_5123E67F78F0476780EDAFDEDE7A9978' />
-          </relationship>
-        </relationships>
       </_.fcp.ObjectModelEncapsulateLegacy.true...object-graph>
     </datasource>
   </datasources>
@@ -2659,7 +2575,7 @@
             <groupfilter function='level-members' level='[Date_reported]' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.1l502fs06d8sad17191mc0d7wgtl].[Action (YEAR(Date reported))]'>
-            <groupfilter function='member' level='[tyr:Date_reported:ok]' member='#2024-01-01 00:00:00#' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+            <groupfilter function='level-members' level='[tyr:Date_reported:ok]' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <slices>
             <column>[federated.1l502fs06d8sad17191mc0d7wgtl].[Action (Country)]</column>
@@ -3120,7 +3036,7 @@
             <groupfilter function='level-members' level='[Date_reported]' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.1l502fs06d8sad17191mc0d7wgtl].[Action (YEAR(Date reported))]'>
-            <groupfilter function='member' level='[tyr:Date_reported:ok]' member='#2024-01-01 00:00:00#' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+            <groupfilter function='level-members' level='[tyr:Date_reported:ok]' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.1l502fs06d8sad17191mc0d7wgtl].[none:Country:nk]'>
             <groupfilter count='10' end='top' function='end' units='records' user:ui-marker='end' user:ui-top-by-field='true'>
@@ -3579,27 +3495,11 @@
             <datasource caption='cleaned_covid_data (2)' name='federated.1l502fs06d8sad17191mc0d7wgtl (copy)' />
           </datasources>
           <datasource-dependencies datasource='federated.1l502fs06d8sad17191mc0d7wgtl (copy)'>
-            <column caption='cases per 100k' datatype='real' name='[Calculation_3815956273447686164]' role='measure' type='quantitative'>
-              <calculation class='tableau' formula='MAX([Cumulative_cases]) / SUM([Population]) * 100000' />
-            </column>
-            <column caption='Deaths per 100k' datatype='real' name='[Calculation_3815956273448067093]' role='measure' type='quantitative'>
-              <calculation class='tableau' formula='MAX([Cumulative_deaths]) / SUM([Population]) * 100000' />
-            </column>
             <column datatype='string' name='[Country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
-            <column caption='Cumulative cases' datatype='integer' name='[Cumulative_cases]' role='measure' type='quantitative' />
-            <column caption='Cumulative deaths' datatype='integer' name='[Cumulative_deaths]' role='measure' type='quantitative' />
-            <column datatype='real' name='[Population]' role='measure' type='quantitative' />
+            <column caption='New cases' datatype='real' name='[New_cases]' role='measure' type='quantitative' />
             <column-instance column='[Country]' derivation='None' name='[none:Country:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Calculation_3815956273447686164]' derivation='User' name='[usr:Calculation_3815956273447686164:qk]' pivot='key' type='quantitative' />
-            <column-instance column='[Calculation_3815956273448067093]' derivation='User' name='[usr:Calculation_3815956273448067093:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[New_cases]' derivation='Sum' name='[sum:New_cases:qk]' pivot='key' type='quantitative' />
           </datasource-dependencies>
-          <filter class='quantitative' column='[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[usr:Calculation_3815956273447686164:qk]' included-values='non-null' />
-          <shelf-sorts>
-            <shelf-sort-v2 dimension-to-sort='[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[none:Country:nk]' direction='DESC' is-on-innermost-dimension='true' measure-to-sort-by='[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[usr:Calculation_3815956273447686164:qk]' shelf='rows' />
-          </shelf-sorts>
-          <slices>
-            <column>[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[usr:Calculation_3815956273447686164:qk]</column>
-          </slices>
           <aggregation value='true' />
         </view>
         <style>
@@ -3612,45 +3512,7 @@
           </style-rule>
         </style>
         <panes>
-          <pane selection-relaxation-option='selection-relaxation-allow'>
-            <view>
-              <breakdown value='on' />
-            </view>
-            <mark class='Automatic' />
-            <style>
-              <style-rule element='mark'>
-                <format attr='mark-labels-cull' value='true' />
-                <format attr='mark-labels-line-first' value='true' />
-                <format attr='mark-labels-line-last' value='true' />
-                <format attr='mark-labels-range-min' value='true' />
-                <format attr='mark-labels-range-max' value='true' />
-                <format attr='mark-labels-mode' value='all' />
-                <format attr='mark-labels-range-scope' value='pane' />
-                <format attr='mark-labels-range-field' value='' />
-                <format attr='mark-labels-show' value='true' />
-              </style-rule>
-            </style>
-          </pane>
-          <pane id='1' selection-relaxation-option='selection-relaxation-allow' x-axis-name='[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[usr:Calculation_3815956273447686164:qk]'>
-            <view>
-              <breakdown value='on' />
-            </view>
-            <mark class='Automatic' />
-            <style>
-              <style-rule element='mark'>
-                <format attr='mark-labels-cull' value='true' />
-                <format attr='mark-labels-line-first' value='true' />
-                <format attr='mark-labels-line-last' value='true' />
-                <format attr='mark-labels-range-min' value='true' />
-                <format attr='mark-labels-range-max' value='true' />
-                <format attr='mark-labels-mode' value='all' />
-                <format attr='mark-labels-range-scope' value='pane' />
-                <format attr='mark-labels-range-field' value='' />
-                <format attr='mark-labels-show' value='true' />
-              </style-rule>
-            </style>
-          </pane>
-          <pane id='2' selection-relaxation-option='selection-relaxation-allow' x-axis-name='[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[usr:Calculation_3815956273448067093:qk]'>
+          <pane id='5' selection-relaxation-option='selection-relaxation-allow'>
             <view>
               <breakdown value='on' />
             </view>
@@ -3671,7 +3533,7 @@
           </pane>
         </panes>
         <rows>[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[none:Country:nk]</rows>
-        <cols>([federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[usr:Calculation_3815956273447686164:qk] + [federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[usr:Calculation_3815956273448067093:qk])</cols>
+        <cols>[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[sum:New_cases:qk]</cols>
       </table>
       <simple-id uuid='{51E5CD13-EA05-4563-AFB0-15D9163D0610}' />
     </worksheet>
@@ -3709,7 +3571,7 @@
             <groupfilter function='level-members' level='[Date_reported]' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[Action (YEAR(Date reported))]'>
-            <groupfilter function='member' level='[tyr:Date_reported:ok]' member='#2024-01-01 00:00:00#' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+            <groupfilter function='level-members' level='[tyr:Date_reported:ok]' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <slices>
             <column>[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[Action (Country)]</column>
@@ -4010,7 +3872,7 @@
             </groupfilter>
           </filter>
           <filter class='categorical' column='[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[Action (YEAR(Date reported))]'>
-            <groupfilter function='member' level='[tyr:Date_reported:ok]' member='#2024-01-01 00:00:00#' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+            <groupfilter function='level-members' level='[tyr:Date_reported:ok]' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <slices>
             <column>[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[Action (Country)]</column>
@@ -4060,6 +3922,14 @@
       <simple-id uuid='{B1E8FB4A-D9B9-41C3-A88D-092A3A939812}' />
     </worksheet>
     <worksheet name='Geeographical(New deaths)'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run bold='true' fontalignment='1'>GEOGRAPHICAL CASES AND DEATHS IN THE UK</run>
+            <run fontalignment='1'>Æ&#10;</run>
+          </formatted-text>
+        </title>
+      </layout-options>
       <table>
         <view>
           <datasources>
@@ -4077,15 +3947,21 @@
                 <semantic-value key='&quot;occupied Palestinian territory, including east Jerusalem&quot;' value='&quot;Palestinian Territories&quot;' />
               </semantic-values>
             </column>
+            <column caption='New cases' datatype='real' name='[New_cases]' role='measure' type='quantitative' />
             <column caption='New deaths' datatype='real' name='[New_deaths]' role='measure' type='quantitative' />
             <column-instance column='[Country]' derivation='None' name='[none:Country:nk]' pivot='key' type='nominal' />
+            <column-instance column='[New_cases]' derivation='Sum' name='[sum:New_cases:qk]' pivot='key' type='quantitative' />
             <column-instance column='[New_deaths]' derivation='Sum' name='[sum:New_deaths:qk]' pivot='key' type='quantitative' />
           </datasource-dependencies>
           <filter class='quantitative' column='[federated.1l502fs06d8sad17191mc0d7wgtl].[Latitude (generated)]' included-values='non-null' />
           <filter class='quantitative' column='[federated.1l502fs06d8sad17191mc0d7wgtl].[Longitude (generated)]' included-values='non-null' />
+          <filter class='categorical' column='[federated.1l502fs06d8sad17191mc0d7wgtl].[none:Country:nk]'>
+            <groupfilter function='member' level='[none:Country:nk]' member='&quot;United Kingdom of Great Britain and Northern Ireland&quot;' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
           <slices>
             <column>[federated.1l502fs06d8sad17191mc0d7wgtl].[Latitude (generated)]</column>
             <column>[federated.1l502fs06d8sad17191mc0d7wgtl].[Longitude (generated)]</column>
+            <column>[federated.1l502fs06d8sad17191mc0d7wgtl].[none:Country:nk]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -4109,6 +3985,7 @@
             </view>
             <mark class='Automatic' />
             <encodings>
+              <text column='[federated.1l502fs06d8sad17191mc0d7wgtl].[sum:New_cases:qk]' />
               <lod column='[federated.1l502fs06d8sad17191mc0d7wgtl].[none:Country:nk]' />
               <color column='[federated.1l502fs06d8sad17191mc0d7wgtl].[sum:New_deaths:qk]' />
               <geometry column='[federated.1l502fs06d8sad17191mc0d7wgtl].[Geometry (generated)]' />
@@ -4116,6 +3993,8 @@
             <style>
               <style-rule element='mark'>
                 <format attr='mark-transparency' value='255' />
+                <format attr='mark-labels-cull' value='true' />
+                <format attr='mark-labels-show' value='true' />
               </style-rule>
             </style>
           </pane>
@@ -4387,7 +4266,7 @@
             <groupfilter function='level-members' level='[Date_reported]' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.1l502fs06d8sad17191mc0d7wgtl].[Action (YEAR(Date reported))]'>
-            <groupfilter function='member' level='[tyr:Date_reported:ok]' member='#2024-01-01 00:00:00#' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+            <groupfilter function='level-members' level='[tyr:Date_reported:ok]' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='quantitative' column='[federated.1l502fs06d8sad17191mc0d7wgtl].[Longitude (generated)]' included-values='non-null' />
           <filter class='categorical' column='[federated.1l502fs06d8sad17191mc0d7wgtl].[none:Country:nk]'>
@@ -4794,7 +4673,7 @@
             <datasource caption='cleaned_covid_data (2)' name='federated.1l502fs06d8sad17191mc0d7wgtl (copy)' />
           </datasources>
           <datasource-dependencies datasource='federated.1l502fs06d8sad17191mc0d7wgtl (copy)'>
-            <column datatype='integer' name='[Cumulative cases (bin)]' role='dimension' type='quantitative'>
+            <column aggregation='None' datatype='integer' name='[Cumulative cases (bin)]' role='dimension' type='quantitative'>
               <calculation class='bin' decimals='6' formula='[Cumulative_cases]' peg='0' size='1.47059e+06' />
             </column>
             <column caption='Cumulative cases' datatype='integer' name='[Cumulative_cases]' role='measure' type='quantitative' />
@@ -5138,7 +5017,7 @@
             <groupfilter function='level-members' level='[Date_reported]' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[Action (YEAR(Date reported))]'>
-            <groupfilter function='member' level='[tyr:Date_reported:ok]' member='#2024-01-01 00:00:00#' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+            <groupfilter function='level-members' level='[tyr:Date_reported:ok]' user:ui-action-filter='[Action1_FC951EB355624705A115B103FEA49B09]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <slices>
             <column>[federated.1l502fs06d8sad17191mc0d7wgtl (copy)].[Action (Country)]</column>
@@ -5233,10 +5112,23 @@
       <style />
       <size maxheight='1100' maxwidth='1500' minheight='1100' minwidth='1500' sizing-mode='fixed' />
       <zones>
-        <zone h='33250' id='3' name='Geographical' w='33300' x='3300' y='4125' />
-        <zone h='33250' id='12' name='Regional Comparison' w='33300' x='3300' y='38625' />
-        <zone h='25125' id='15' name='Case_Fatality_Rate' w='45400' x='2400' y='73500' />
-        <zone h='73875' id='19' name='COVID-19 Daily New Cases and Deaths in the United Kingdom' w='44500' x='37500' y='6875' />
+        <zone h='100000' id='41' type-v2='layout-basic' w='100000' x='0' y='0'>
+          <zone h='100000' id='44' param='horz' type-v2='layout-flow' w='100000' x='0' y='0'>
+            <zone h='100000' id='42' type-v2='layout-basic' w='89333' x='0' y='0' />
+            <zone fixed-size='160' h='100000' id='43' is-fixed='true' param='vert' type-v2='layout-flow' w='10667' x='89333' y='0'>
+              <zone h='6636' id='45' name='Geeographical(New deaths)' pane-specification-id='0' param='[federated.1l502fs06d8sad17191mc0d7wgtl].[sum:New_deaths:qk]' type-v2='color' w='10667' x='89333' y='0'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+            </zone>
+          </zone>
+        </zone>
+        <zone h='73818' id='19' name='COVID-19 Daily New Cases and Deaths in the United Kingdom' w='44467' x='48200' y='12818' />
+        <zone h='32545' id='40' name='Geeographical(New deaths)' w='31533' x='1667' y='2273' />
       </zones>
       <devicelayouts>
         <devicelayout auto-generated='true' name='Phone'>
@@ -5244,34 +5136,7 @@
           <zones>
             <zone h='100000' id='39' type-v2='layout-basic' w='100000' x='0' y='0'>
               <zone h='98546' id='38' param='vert' type-v2='layout-flow' w='98934' x='533' y='727'>
-                <zone fixed-size='280' h='33250' id='3' is-fixed='true' name='Geographical' w='33300' x='3300' y='4125'>
-                  <zone-style>
-                    <format attr='border-color' value='#000000' />
-                    <format attr='border-style' value='none' />
-                    <format attr='border-width' value='0' />
-                    <format attr='margin' value='4' />
-                    <format attr='padding' value='0' />
-                  </zone-style>
-                </zone>
                 <zone fixed-size='280' h='73875' id='19' is-fixed='true' name='COVID-19 Daily New Cases and Deaths in the United Kingdom' w='44500' x='37500' y='6875'>
-                  <zone-style>
-                    <format attr='border-color' value='#000000' />
-                    <format attr='border-style' value='none' />
-                    <format attr='border-width' value='0' />
-                    <format attr='margin' value='4' />
-                    <format attr='padding' value='0' />
-                  </zone-style>
-                </zone>
-                <zone fixed-size='280' h='33250' id='12' is-fixed='true' name='Regional Comparison' w='33300' x='3300' y='38625'>
-                  <zone-style>
-                    <format attr='border-color' value='#000000' />
-                    <format attr='border-style' value='none' />
-                    <format attr='border-width' value='0' />
-                    <format attr='margin' value='4' />
-                    <format attr='padding' value='0' />
-                  </zone-style>
-                </zone>
-                <zone fixed-size='276' h='25125' id='15' is-fixed='true' name='Case_Fatality_Rate' w='45400' x='2400' y='73500'>
                   <zone-style>
                     <format attr='border-color' value='#000000' />
                     <format attr='border-style' value='none' />
@@ -5294,12 +5159,19 @@
       <simple-id uuid='{B6F7BDC4-1CC1-4100-8455-CD434238973D}' />
     </dashboard>
     <dashboard _.fcp.AccessibleZoneTabOrder.true...enable-sort-zone-taborder='true' name='Dashboard 2'>
-      <style />
+      <style>
+        <style-rule element='table'>
+          <format attr='background-color' value='#e6ecf0' />
+        </style-rule>
+        <style-rule element='dash-title'>
+          <format attr='text-align' value='left' />
+        </style-rule>
+      </style>
       <size sizing-mode='automatic' />
       <zones>
-        <zone h='21053' id='11' name='Cum case' show-title='false' w='29446' x='432' y='26488' />
+        <zone h='21017' id='11' name='Cum case' show-title='false' w='28369' x='1489' y='26488' />
         <zone h='27831' id='13' name='cum deaths' show-title='false' w='27943' x='1702' y='55662' />
-        <zone h='8485' id='15' name='BAN' show-title='false' w='24948' x='2571' y='17883' />
+        <zone h='6526' id='15' name='BAN' show-title='false' w='26099' x='1418' y='19866' />
         <zone h='66529' id='20' name='Map' w='42948' x='30042' y='18714' />
         <zone h='69002' id='21' name='CUMULATIVE CASES BAR' w='25089' x='74318' y='14839' />
         <zone h='8079' id='26' name='Dashboard Title' show-title='false' w='96121' x='1763' y='2061' />
@@ -5633,7 +5505,7 @@
       </viewpoint>
       <simple-id uuid='{8F6EBAC6-BC72-4F5E-9D67-E7995C890B3A}' />
     </window>
-    <window class='worksheet' name='Cases and Death per 100k'>
+    <window class='worksheet' maximized='true' name='Cases and Death per 100k'>
       <cards>
         <edge name='left'>
           <strip size='160'>
@@ -5929,34 +5801,17 @@
         <viewpoint name='COVID-19 Daily New Cases and Deaths in the United Kingdom'>
           <zoom type='entire-view' />
         </viewpoint>
-        <viewpoint name='Case_Fatality_Rate'>
-          <current-page>
-            <multibucket>
-              <bucket>#2024-01-01 00:00:00#</bucket>
-            </multibucket>
-          </current-page>
-          <zoom type='entire-view' />
-        </viewpoint>
-        <viewpoint name='Geographical'>
-          <zoom type='entire-view' />
-          <floating-toolbar-visibility value='1' />
-        </viewpoint>
-        <viewpoint name='Regional Comparison'>
-          <current-page>
-            <multibucket>
-              <bucket>#2024-01-28#</bucket>
-            </multibucket>
-          </current-page>
+        <viewpoint name='Geeographical(New deaths)'>
           <zoom type='entire-view' />
         </viewpoint>
       </viewpoints>
-      <active id='-1' />
+      <active id='40' />
       <device-preview selected='Desktop'>
         <device is-portrait='true' name='Generic Desktop Monitor' type='Desktop' />
       </device-preview>
       <simple-id uuid='{B6DD895C-576C-49F4-9B8A-903F24DF2EF9}' />
     </window>
-    <window class='dashboard' maximized='true' name='Dashboard 2'>
+    <window class='dashboard' name='Dashboard 2'>
       <viewpoints>
         <viewpoint name='BAN'>
           <current-page>
@@ -6000,7 +5855,7 @@
           <zoom type='entire-view' />
         </viewpoint>
       </viewpoints>
-      <active id='26' />
+      <active id='-1' />
       <device-preview visible='true' />
       <simple-id uuid='{66FAAA07-A128-4C42-BEC6-AEE630DE840A}' />
     </window>
